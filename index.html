@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+        <link rel="stylesheet" href="style.css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+        ></script>
+
+        <title>Formulaire</title>
+    </head>
+    <body class="h-full">
+        <div
+            class="flex flex-col justify-center items-center"
+            x-data="ToDoList()"
+            x-init="loadStorage()"
+        >
+            <h1
+                class="mb-4 text-4xl font-extrabold leading-none tracking-tight"
+            >
+                To Do
+            </h1>
+            <template x-for="myTodo in toDoList" :key="myTodo.id">
+                <div
+                    x-show="!open"
+                    class="w-48 text-sm font-medium border border-gray-200 rounded-lg mb-1"
+                >
+                    <div
+                        class="w-full h-[130px] px-4 py-2 border-b border-gray-200 rounded-t-lg"
+                        :class="getTaskClass(myTodo);  "
+                    >
+                        <h2 class="" x-text="myTodo.title"></h2>
+                        <p class="text-xs" x-text="myTodo.description"></p>
+
+                        <p class="text-xs" x-text="myTodo.deadline"></p>
+                        <button
+                            class="bg-green-200 hover:bg-green-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+                            @click.prevent="toDoDone(myTodo)"
+                        >
+                            Done
+                        </button>
+                        <button
+                            class="bg-red-200 hover:bg-red-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+                            @click.prevent="deleteToDo(myTodo.id)"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </template>
+            <div>
+                <button
+                    class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+                    x-show="!open"
+                    @click="open =!open"
+                >
+                    Add Todo
+                </button>
+                <div x-show="open" @click.outside="open = false">
+                    <form id="toDoForm">
+                        <div>
+                            <label for="title">Title:</label>
+                            <input
+                                x-model="newTodo.title"
+                                type="text"
+                                id="title"
+                                name="title"
+                            />
+                        </div>
+                        <div>
+                            <label for="description">Description:</label>
+                            <textarea
+                                x-model="newTodo.description"
+                                id="description"
+                                name="description"
+                                rows="4"
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label for="duration"
+                                >Estimated Duration (days):</label
+                            >
+                            <input
+                                x-model="newTodo.duration"
+                                type="number"
+                                id="duration"
+                                name="duration"
+                                min="0"
+                            />
+                        </div>
+                        <div>
+                            <label for="deadline">Deadline:</label>
+                            <input
+                                x-model="newTodo.deadline"
+                                type="date"
+                                id="deadline"
+                                name="deadline"
+                            />
+                        </div>
+                        <div>
+                            <label for="tags">Tags (comma separated):</label>
+                            <input
+                                x-model="newTodo.tags"
+                                type="text"
+                                id="tags"
+                                name="tags"
+                            />
+                        </div>
+                        <button
+                            @click.prevent="addToDo,open = false"
+                            type="submit"
+                            class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+                        >
+                            Create Task
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
